@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<script>
+    $(function() {
+        $('#btnLaunch').click(function() {
+            $.ajax({
+                url: '@Url.RouteUrl(new { action = "GetLtiResource", controller = "Home" })',
+                data: {
+                    resourceUrl: $('#resourceUrl').val(),
+                    resourceId: $('#resourceId').val()
+                },
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                success: function(ltirequest) {
+
+                    f = $('<form />');
+                    f.attr({
+                        action: ltirequest.action,
+                        method: 'post',
+                        target: '_blank',
+                        encType: 'application/x-www-form-urlencoded'
+                    });
+
+                    ltirequest.fields['oauth_signature'] = ltirequest.signature;
+                    Object.keys(ltirequest.fields).forEach(function (field, index) {
+                        $('<input />')
+                            .attr( {
+                                type: 'hidden',
+                                name: field
+                            })
+                            .val(ltirequest.fields[field])
+                            .appendTo(f);
+                    });
+
+                    f.appendTo('body');
+                    f[0].submit();
+                    f.remove();
+                }});
+        });
+    });
+
+</script>
+
+<form class="form">
+    <div class="form-group">
+        <label for="resourceUrl">ResourceUrl</label>
+        <input class="form-control" id="resourceUrl" value="https://proto.sascurriculumpathways.com/portal/Launch?id=198" />
+    </div>
+    <div class="form-group">
+        <label for="resourceId">ResourceId</label>
+        <input class="form-control" id="resourceId" value="urn:www.sascurriculumpathways.com:resource:198" />
+    </div>
+    <button type="button" id="btnLaunch" class="btn btn-primary">Launch</button>
+</form>
