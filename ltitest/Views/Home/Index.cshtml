@@ -4,7 +4,13 @@
 
 <script>
     $(function() {
-        $('#btnLaunch').click(function() {
+        $('#btnLaunch').click(function () {
+            //var ifrm = document.getElementById('ltiFrame');
+            //ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
+            //ifrm.document.open();
+            //ifrm.document.write('Hello World!');
+            //ifrm.document.close();
+            //return;
             $.ajax({
                 url: '@Url.RouteUrl(new { action = "GetLtiResource", controller = "Home" })',
                 data: {
@@ -19,7 +25,7 @@
                     f.attr({
                         action: ltirequest.action,
                         method: 'post',
-                        target: '_blank',
+                        target: 'ltiFrame',//'_blank',
                         encType: 'application/x-www-form-urlencoded'
                     });
 
@@ -53,4 +59,7 @@
         <input class="form-control" id="resourceId" value="urn:www.sascurriculumpathways.com:resource:198" />
     </div>
     <button type="button" id="btnLaunch" class="btn btn-primary">Launch</button>
+    <div>
+        <iframe name="ltiFrame" id="ltiFrame"></iframe>
+    </div>
 </form>
